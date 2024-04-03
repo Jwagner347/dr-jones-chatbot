@@ -7,6 +7,8 @@ export const runtime = 'edge';
 export async function POST(req: Request) {
   const { messages } = await req.json();
   const currentMessageContent = messages[messages.length - 1].content;
+  console.log("currentMessageContent")
+  console.log(currentMessageContent)
 
   const vectorSearch = await fetch("http://localhost:3000/api/vectorSearch", {
     method: "POST",
@@ -15,11 +17,14 @@ export async function POST(req: Request) {
     },
     body: currentMessageContent,
   }).then((res) => res.json());
+  const contextSections = JSON.stringify(vectorSearch)
+  console.log("contextSections")
+  console.log(contextSections)
 
-  const TEMPLATE = `You are a very enthusiastic SwipeSense customer service representative who loves to help people! Given the following sections from the support documentation for SwipeSense, answer the question using only that information, outputted in markdown format. If you are unsure and the answer is not explicitly written in the documentation, say "Sorry, I don't know how to help with that."
+  const TEMPLATE = `You are a very enthusiastic SwipeSense customer service representative who loves to help people! Given the following sections from the support documentation for SwipeSense, answer the question using only that information and be sure to provide detailed explanations, outputted in markdown format. If you are unsure and the answer is not explicitly written in the documentation, say "Sorry, I don't know how to help with that."
   
   Context sections:
-  ${JSON.stringify(vectorSearch)}
+  ${contextSections}
 
   Question: """
   ${currentMessageContent}

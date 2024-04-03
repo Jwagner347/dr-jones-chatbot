@@ -2,8 +2,6 @@ import { StreamingTextResponse, LangChainStream, Message } from "ai";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { AIMessage, HumanMessage } from "langchain/schema";
 
-export const runtime = "edge";
-
 export async function POST(req: Request) {
   const { messages } = await req.json();
   const currentMessageContent = messages[messages.length - 1].content;
