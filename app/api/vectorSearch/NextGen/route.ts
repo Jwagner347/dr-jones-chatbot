@@ -4,7 +4,7 @@ import mongoClientPromise from '@/app/lib/mongodb';
 
 export async function POST(req: Request) {
   const client = await mongoClientPromise;
-  const dbName = "docs";
+  const dbName = "dr_jones_docs";
   const collectionName = "embeddings";
   const collection = client.db(dbName).collection(collectionName);
   
@@ -22,8 +22,10 @@ export async function POST(req: Request) {
   });
 
   const retriever = vectorStore.asRetriever({
+    // maximum marginal relevance
     searchType: "mmr",
     searchKwargs: {
+      // number of results to fetch and how many of top results to return
       fetchK: 20,
       lambda: 0.1,
     },
